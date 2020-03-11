@@ -1,0 +1,17 @@
+# this bootstrap disables all the spring cloud stuff to run the service locally
+# without having to start the entire cloud stack
+
+spring:
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+  sleuth:
+    enabled: false
+
+eureka:
+  client:
+    enabled: false
