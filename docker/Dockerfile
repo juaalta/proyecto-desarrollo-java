@@ -3,7 +3,10 @@ FROM maven:3.6.3-jdk-11 AS builder
 
 WORKDIR /app
 
-COPY pom.xml /app
+COPY mvnw .
+COPY mvnw.cmd .
+COPY .mvn ./.mvn
+COPY pom.xml .
 RUN mvn -e -B dependency:resolve
 
 COPY src /app/src
@@ -11,26 +14,26 @@ RUN mvn -e -B package
 
 
 
-FROM maven:3.6.3-jdk-11 as test
-WORKDIR /opt/app
+FROM builder as test
+#WORKDIR /opt/app
 #ADD target/app.jar /opt/app/app.jar
-COPY --from=builder /app/target/project-0.0.1-SNAPSHOT.jar /project-0.0.1-SNAPSHOT.jar
+#COPY --from=builder /app/target/project-0.0.1-SNAPSHOT.jar /project-0.0.1-SNAPSHOT.jar
 
-RUN mvn -e -B test
+RUN mvn test
 
 
 
 # Java 8
 # FROM openjdk:8-jre
 # Java 11
-FROM openjdk:11-jre-alpine
-
-RUN addgroup -S java && adduser -S javauser -G java
+FROM openjdk:11-jre-slim
+#RUN addgroup -S java && adduser -S javauser -G java
+RUN addgroup --system java && adduser --system javauser --ingroup java
 USER javauser
 
 WORKDIR /opt/app
 #ADD target/app.jar /opt/app/app.jar
-COPY --from=builder /app/target/project-0.0.1-SNAPSHOT.jar /project-0.0.1-SNAPSHOT.jar
+COPY --from=builder /app/target/app.jar app.jar
 
 VOLUME /tmp
 
