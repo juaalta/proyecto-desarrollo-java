@@ -41,13 +41,13 @@ test: ## Test the container
 run: ## Run container on port configured in `config.env`
 	docker run -i -t --rm --env-file=./config.env -p=$(PORT):$(PORT) --name="$(APP_NAME)" $(DOCKER_REPO)/$(APP_NAME)
 
-
 up: build run ## Run container on port configured in `config.env` (Alias to run)
 
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME); docker rm $(APP_NAME)
 
 release: build-nc publish ## Make a release by building and publishing the `{version}` and `latest` tagged containers to Docker Repository
+
 
 # Docker publish
 publish: repo-login publish-latest publish-version ## Publish the `{version}` and `latest` tagged containers to Docker Repository
@@ -60,6 +60,7 @@ publish-version: tag-version ## Publish the `{version}` taged container to Docke
 	@echo 'publish $(VERSION) to $(DOCKER_REPO)'
 	docker push $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
 
+
 # Docker tagging
 tag: tag-latest tag-version ## Generate container tags for the `{version}` and `latest` tags
 
@@ -71,9 +72,25 @@ tag-version: ## Generate container `{version}` tag
 	@echo 'create tag $(VERSION)'
 	docker tag $(DOCKER_REPO)/$(APP_NAME) $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
 
-# login to Docker Repository
+
+# Login to Docker Repository
 repo-login: ## Login to Docker Repository
 	docker login $(DOCKER_REPO)
 
+
+# Docker clean
+builder-clean: ## Remove build cache
+	docker builder prune -af
+
+system-clean: ## Remove all unused containers, networks, images (both dangling and unreferenced), and volumes
+	docker system prune -af --volumes
+
+clean: builder-clean system-clean ## Clean all unused docker data
+
+
+# Output variables
 version: ## Output the current version
 	@echo $(VERSION)
+
+app-name: ## Output the application name
+	@echo $(APP_NAME)
