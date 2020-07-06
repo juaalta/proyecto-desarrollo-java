@@ -83,10 +83,10 @@ builder-clean: ## Remove build cache
 	docker builder prune -af
 
 containers-clean: ## Remove unnecessary containers
-docker rm $(docker ps -q -f 'status=exited')
+	docker rm $(docker ps -q -f 'status=exited')
 
 images-clean: ## Remove unnecessary images
-docker rmi $(docker images -q -f "dangling=true")
+	docker rmi $(docker images -q -f "dangling=true")
 
 system-clean: ## Remove all unused containers, networks, images (both dangling and unreferenced), and volumes
 	docker system prune -af --volumes
