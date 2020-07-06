@@ -36,7 +36,7 @@ build-nc: ## Build the container without caching
 	docker build -f ./docker/Dockerfile --no-cache --force-rm --tag $(DOCKER_REPO)/$(APP_NAME) .
 
 test: ## Test the container
-	docker build -f ./docker/Dockerfile --target test --force-rm --tag $(DOCKER_REPO)/$(APP_NAME) .
+	docker build -f ./docker/Dockerfile --no-cache --target test --force-rm --tag $(DOCKER_REPO)/$(APP_NAME) .
 
 run: ## Run container on port configured in `config.env`
 	docker run -i -t --rm --env-file=./config.env -p=$(PORT):$(PORT) --name="$(APP_NAME)" $(DOCKER_REPO)/$(APP_NAME)
