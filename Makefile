@@ -74,11 +74,15 @@ tag-version: ## Generate container `{version}` tag
 
 
 # Login to Docker Repository
-repo-login: ## Login to Docker Repository
-	docker login $(DOCKER_REPO)
+repo-login: ## Login to Docker Repository Comment the repository if it is Docker Hub.
+	docker login # $(DOCKER_REPO)
 
 
 # Docker clean
+clean: ## Remove image
+	docker rmi $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
+	docker rmi $(DOCKER_REPO)/$(APP_NAME)
+
 builder-clean: ## Remove build cache
 	docker builder prune -af
 
@@ -91,12 +95,19 @@ images-clean: ## Remove unnecessary images
 system-clean: ## Remove all unused containers, networks, images (both dangling and unreferenced), and volumes
 	docker system prune -af --volumes
 
-clean: builder-clean containers-clean images-clean system-clean ## Clean all unused docker data
+clean-all: builder-clean containers-clean images-clean system-clean ## Clean all unused docker data
 
 
 # Output variables
+app-name: ## Output the application name
+	@echo $(APP_NAME)
+
 version: ## Output the current version
 	@echo $(VERSION)
 
-app-name: ## Output the application name
-	@echo $(APP_NAME)
+docker-repo: ## Output the current docker repository
+	@echo $(DOCKER_REPO)
+
+image-name: ## Output the current docker image name
+	@echo $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
+
