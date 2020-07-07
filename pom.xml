@@ -8,8 +8,8 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.idrica.goaigua</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.juaalta.demo</groupId>
+	<artifactId>demo-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
